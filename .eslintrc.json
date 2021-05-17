@@ -21,7 +21,6 @@
         "no-var": "error",
         "prefer-const": "off",
         "@typescript-eslint/no-unused-vars": "off",
-        "@typescript-eslint/no-var": "error",
         "@typescript-eslint/prefer-const": "off"
     }
 }
