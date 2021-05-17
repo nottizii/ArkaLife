@@ -1,0 +1,27 @@
+{
+  "name": "arkalife",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint src/",
+    "fix": "eslint --fix src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xAtsuUC/ArkaLife.git"
+  },
+  "author": "xAtsuUC",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xAtsuUC/ArkaLife/issues"
+  },
+  "homepage": "https://github.com/xAtsuUC/ArkaLife#readme",
+  "devDependencies": {
+    "dotenv": "^9.0.2",
+    "eslint": "^7.26.0"
+  },
+  "dependencies": {
+    "discord.js": "github:discordjs/discord.js"
+  }
+}
