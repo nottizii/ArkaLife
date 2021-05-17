@@ -2,7 +2,7 @@
   "name": "arkalife",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "compiled/index.js",
   "scripts": {
     "test": "eslint compiled/",
     "fix": "eslint --fix compiled/",
