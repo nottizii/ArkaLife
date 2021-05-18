@@ -16,5 +16,14 @@ module.exports = {
         console.log(str)
         //let channel = client.channels.cache.get('843666233945882635') as TextChannel
         //channel.send(str)
+        client.commands = new Discord.Collection();
+
+        const cmddir = fs.readdirSync("./commands")
+
+        for(const cmd of cmddir) {
+            const cmdfile = require("../../commands/"+cmd)
+            client.commands.set(cmdfile.name, cmdfile)
+            console.log(chalk.green('[Command] ') + `${cmdfile.name} (${cmd}) loaded`)
+        }
     }
 }
