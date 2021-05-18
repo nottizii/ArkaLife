@@ -5,7 +5,7 @@ module.exports = {
     name: "prune",
     aliases: [],
     permissions: ['KICK_MEMBERS'],
-    run: async (message, args, client) => {
+    run: async (client, message, args) => {
         const number = await message.guild.members.prune({
             dry: true,
             days: 30
