@@ -12,17 +12,14 @@ module.exports = {
             case 0:
                 client.distube.setRepeatMode(message, 0)
                 return message.reply('Modo de bucle: off')
-                break;
         
             case 1:
                 client.distube.setRepeatMode(message, 1)
                 return message.reply('Modo de bucle: Canción actual')
-                break;
 
             case 2:
                 client.distube.setRepeatMode(message, 2)
                 return message.reply('Modo de bucle: Cola actual')
-                break;
         }
         
     }
