@@ -4,14 +4,27 @@
 /* global __dirname */
 
 //// variables ////
-
+import DisTube from "distube"
 const Discord = require('discord.js')
 require('dotenv').config()
 const settings = require('./storage/settings.json')
 const fs = require('fs')
 const chalk = require('chalk')
 const { GiveawaysManager } = require('discord-giveaways')
+import ArkaLifeError from "./util/handler/errorEmmiter"
+import { Message, MessageEmbed, Structures } from "discord.js"
 
+Structures.extend("GuildMember", GuildMember => {
+    class ArkaMember extends GuildMember {
+        constructor(client, data, guild) {
+            super(client, data, guild)
+        }
+        isDJ(message: Message):boolean {
+            return (this.roles.cache.find(r => r.name === 'DJ')) ? true : message.member.permissions.has("MANAGE_CHANNELS")
+        }
+    }
+    return ArkaMember;
+})
 
 //////////////////// Client ////////////////////
 const client = new Discord.Client({
@@ -33,6 +46,8 @@ client.distube = new DisTube(client, {
     leaveOnEmpty: true,
     leaveOnStop: true
 })
+
+client.errors = new ArkaLifeError('MusicError', '❌')
 //////////////////// Client ////////////////////
 
 //////////////////// Event loader ////////////////////
@@ -78,17 +93,35 @@ client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction)
 client.giveawaysManager.on("giveawayReactionRemoved", (giveaway, member, reaction) => {
     console.log(`${member.user.tag} salió del sorteo #${giveaway.messageID} (${reaction.emoji.name})`);
 });
+
+client.distube.on("playSong", function(msg, queue, song) {
+    queue.initMessage.channel.send(
+        new MessageEmbed()
+        .setDescription("Ahora reproduciendo: \n" + `[${song.name}](${song.url}) || \`${song.formattedDuration}\``)
+        .setColor("GREEN")
+    )
+})
+
+client.distube.on("empty", message => {
+    message.channel.send(
+        new MessageEmbed()
+        .setDescription("Chat de voz vacio, saliendo...")
+    )
+})
+
 //// Event Handler ////
 
 //// Login :) ////
 client.login(process.env['TOKEN'])
 //// Login :) ////
 
-
-import DisTube from "distube"
-
 declare module 'discord.js' {
     interface Client {
         distube: DisTube,
+        errors: ArkaLifeError
+    }
+
+    interface GuildMember {
+        isDJ(message): boolean
     }
 }
