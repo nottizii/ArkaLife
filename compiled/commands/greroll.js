@@ -3,7 +3,7 @@ module.exports = {
     aliases: [],
     run: (client, message, args) => {
         // If the member doesn't have enough permissions
-        if (!message.member.permissions.has('MANAGE_MESSAGES') && !message.member.roles.cache.some((r) => r.name === "Giveaways")) {
+        if (!message.member.permission.has('MANAGE_MESSAGES') && !message.member.roles.cache.some((r) => r.name === "Giveaways")) {
             return message.channel.send(':x: Necesitas el permiso de GESTIONAR MENSAJES para resortear un sorteo.');
         }
         // If no message ID or giveaway name is specified

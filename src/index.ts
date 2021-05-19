@@ -1,7 +1,16 @@
+//// ts/eslint things////
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* global process */
 /* global __dirname */
+
+declare module 'discord.js' {
+    interface Guild {
+        queue: unknown
+    }
+}
+//// ts/eslint things////
 
 //// variables ////
 
@@ -11,6 +20,16 @@ const settings = require('./storage/settings.json')
 const fs = require('fs')
 const chalk = require('chalk')
 const { GiveawaysManager } = require('discord-giveaways')
+
+Discord.Structures.extend("Guild", Guild => {
+    class ExtGuild extends Guild {
+        constructor(client, data) {
+            super(client, data)
+            this.queue = new Discord.Collection()
+        }
+    }
+    return ExtGuild;
+})
 
 const client = new Discord.Client({
     intents: Discord.Intents.ALL,
