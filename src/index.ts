@@ -8,6 +8,7 @@ declare module 'discord.js' {
         queue: unknown
     }
 }
+
 //// ts/eslint things////
 
 //// variables ////
