@@ -20,8 +20,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Discord = __importStar(require("discord.js"));
+const chalk = require('chalk');
 const fs = __importStar(require("fs"));
-const chalk = require("chalk");
 module.exports = {
     name: "ready",
     run: async (client) => {
@@ -37,10 +37,17 @@ module.exports = {
         //channel.send(str)
         client.commands = new Discord.Collection();
         const cmddir = fs.readdirSync("./commands");
+        const musicdir = fs.readdirSync("./commands/music");
         for (const cmd of cmddir) {
             const cmdfile = require("../../commands/" + cmd);
             client.commands.set(cmdfile.name, cmdfile);
             console.log(chalk.green('[Command] ') + `${cmdfile.name} (${cmd}) loaded`);
+        }
+        for (const a of musicdir) {
+            console.log(a);
+            //const musicfile = require("../../commands/music/"+a)
+            //client.commands.set(musicfile.name, musicfile)
+            //console.log(chalk.bgGreen('[Music] ') + `${musicfile.name} (${a}) loaded`)
         }
     }
 };

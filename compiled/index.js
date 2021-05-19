@@ -8,6 +8,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 //// variables ////
+const distube_1 = __importDefault(require("distube"));
 const Discord = require('discord.js');
 require('dotenv').config();
 const settings = require('./storage/settings.json');
@@ -71,5 +72,3 @@ client.giveawaysManager.on("giveawayReactionRemoved", (giveaway, member, reactio
 //// Event Handler ////
 //// Login :) ////
 client.login(process.env['TOKEN']);
-//// Login :) ////
-const distube_1 = __importDefault(require("distube"));
