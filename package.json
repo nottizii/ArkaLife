@@ -8,7 +8,8 @@
     "fix": "eslint --fix compiled/",
     "tstest": "eslint src/",
     "tsfix": "eslint --fix src/",
-    "build": "tsc"
+    "build": "tsc",
+    "watch": "tsc --watch"
   },
   "repository": {
     "type": "git",
