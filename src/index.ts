@@ -1,5 +1,3 @@
-//// ts/eslint things////
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* global process */
