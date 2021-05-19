@@ -36,18 +36,17 @@ module.exports = {
         //let channel = client.channels.cache.get('843666233945882635') as TextChannel
         //channel.send(str)
         client.commands = new Discord.Collection();
-        const cmddir = fs.readdirSync("./commands");
-        const musicdir = fs.readdirSync("./commands/music");
+        const cmddir = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
+        const musicdir = fs.readdirSync("./commands/music").filter(file => file.endsWith(".js"));
         for (const cmd of cmddir) {
             const cmdfile = require("../../commands/" + cmd);
             client.commands.set(cmdfile.name, cmdfile);
             console.log(chalk.green('[Command] ') + `${cmdfile.name} (${cmd}) loaded`);
         }
         for (const a of musicdir) {
-            console.log(a);
-            //const musicfile = require("../../commands/music/"+a)
-            //client.commands.set(musicfile.name, musicfile)
-            //console.log(chalk.bgGreen('[Music] ') + `${musicfile.name} (${a}) loaded`)
+            const musicfile = require("../../commands/music/" + a);
+            client.commands.set(musicfile.name, musicfile);
+            console.log(chalk.green('[Music] ') + `${musicfile.name} (${a}) loaded`);
         }
     }
 };
