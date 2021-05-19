@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* global process */
+/* global __dirname */
 //// variables ////
 const Discord = require('discord.js');
 require('dotenv').config();
