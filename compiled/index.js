@@ -1,8 +1,12 @@
+"use strict";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* global process */
 /* global __dirname */
-//// ts/eslint things////
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 //// variables ////
 const Discord = require('discord.js');
 require('dotenv').config();
@@ -10,15 +14,7 @@ const settings = require('./storage/settings.json');
 const fs = require('fs');
 const chalk = require('chalk');
 const { GiveawaysManager } = require('discord-giveaways');
-Discord.Structures.extend("Guild", Guild => {
-    class ExtGuild extends Guild {
-        constructor(client, data) {
-            super(client, data);
-            this.queue = new Discord.Collection();
-        }
-    }
-    return ExtGuild;
-});
+//////////////////// Client ////////////////////
 const client = new Discord.Client({
     intents: Discord.Intents.ALL,
     fetchAllMembers: true,
@@ -32,6 +28,13 @@ const client = new Discord.Client({
         }
     }
 });
+client.distube = new distube_1.default(client, {
+    emitNewSongOnly: false,
+    leaveOnEmpty: true,
+    leaveOnStop: true
+});
+//////////////////// Client ////////////////////
+//////////////////// Event loader ////////////////////
 client.events = new Discord.Collection();
 const evendir = fs.readdirSync(__dirname + "/util/handler").filter((file) => file.endsWith(".js"));
 for (const ev of evendir) {
@@ -39,6 +42,8 @@ for (const ev of evendir) {
     client.events.set(event.name, event);
     console.log(chalk.green('[Event] ') + `${event.name} (${ev}) loaded`);
 }
+//////////////////// Event loader ////////////////////
+//////////////////// Giveaways handling ////////////////////
 client.giveawaysManager = new GiveawaysManager(client, {
     storage: "./storage/giveaways.json",
     updateCountdownEvery: 30000,
@@ -48,7 +53,9 @@ client.giveawaysManager = new GiveawaysManager(client, {
         reaction: "🎉"
     }
 });
+//////////////////// Giveaways handling ////////////////////
 //// variables ////
+//// Event Handler ////
 client.once('ready', () => {
     client.events.get("ready").run(client);
 });
@@ -61,4 +68,8 @@ client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction)
 client.giveawaysManager.on("giveawayReactionRemoved", (giveaway, member, reaction) => {
     console.log(`${member.user.tag} salió del sorteo #${giveaway.messageID} (${reaction.emoji.name})`);
 });
+//// Event Handler ////
+//// Login :) ////
 client.login(process.env['TOKEN']);
+//// Login :) ////
+const distube_1 = __importDefault(require("distube"));
