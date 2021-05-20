@@ -21,49 +21,92 @@ class SuggestionManager extends EventEmitter {
     async addSuggestion(Suggestion: Suggestion):Promise<SuggestionData> {
         this.suggID = this._genID(7)
         return new Promise((resolve, reject) => {
-            this.pool.getConnection((err: mysql.MysqlError, con: mysql.PoolConnection) => {
+            this.pool.getConnection(async(err: mysql.MysqlError, con: mysql.PoolConnection) => {
                 if(err) reject(err)
-                con.query(`INSERT INTO data_suggestions (ID, Status, Text, UserID, Review, Reviewer, Score) VAULUES('${this.suggID}, 2, '${Suggestion.message}', '${Suggestion.member.id}, null, null, 0')`)
+                con.query(`INSERT INTO data_suggestions (ID, Status, Text, UserID, Review, Score) VALUES('${this.suggID}', '2', '${Suggestion.message}', '${Suggestion.member.id}', 'null', '0')`, async(err, rows) => {
+                    if(err) reject(err)
+                    resolve(await this._getData(this.suggID))
+                })
                 con.release()
+                this.emit("suggestionAdd", await this._getData(this.suggID))
             })
-            let data = {
-                ID: this.suggID,
-                Status: 2,
-                Text: Suggestion.message,
-                UserID: Suggestion.member.id,
-                Review: null,
-                Reviewer: null,
-                Score: 0
-            }
-            resolve(data)
-            this.emit("suggestionAdd", data as SuggestionData)
         })
-        
     }
 
     async getSuggestion(id:string):Promise<SuggestionData>{
+        let aw = await this._getData(id)
         return new Promise((resolve, reject) => {
-            this.pool.getConnection((err: mysql.MysqlError, con: mysql.PoolConnection) => {
-                if(err) reject(err);
-                con.query(`SELECT * FROM data_suggestions WHERE id ='${id}'`, (e, result) => {
-                    if(e) reject(e);
-                    resolve(result[0] as SuggestionData)
+            resolve(aw)
+        })
+    }
+
+    async reviewSuggestion(id:string, aod:number, reason:string, UID:string):Promise<SuggestionData> {
+        return new Promise((resolve, reject) => {
+            this.pool.getConnection(async(err: mysql.MysqlError, con: mysql.PoolConnection) => {
+                if(err) reject(err)
+                con.query(`UPDATE data_suggestions SET Status = '${aod}', Review = '${reason}', Reviewer = '${UID}' WHERE ID = '${id}'`, async(err, rows) => {
+                    if(err) reject(err)
+                    resolve(await this._getData(id))         
                 })
+                con.release()
+                this.emit("suggestionReview", await this._getData(id))
             })
         })
     }
 
-    async reviewSuggestion(aod:number, reason:string):Promise<SuggestionData> {
+    async deleteSuggestion(id:string):Promise<SuggestionData> {
+        async function re() {
+            this.emit("suggestionDelete", await this._getData(this.id))
+            return await this._getData(this.id)
+        }
         return new Promise((resolve, reject) => {
             this.pool.getConnection((err: mysql.MysqlError, con: mysql.PoolConnection) => {
-                if(err) reject(err)
-                con.query(`UPDATE data_suggestions (Review, Reviewer) VALUES(${aod}, '${reason}')`, (err, rows) => {
+                con.query(`DELETE FROM data_suggestions where ID = '${id}'`, (err, rows) => {
                     if(err) reject(err)
                     resolve(rows[0] as SuggestionData)
-                    this.emit("suggestionReview", rows[0] as SuggestionData)
+                    this.emit("suggestionDelete", re())
                 })
+                con.release()
             })
         })
+    }
+
+    async getAllSuggestions():Promise<SuggestionDataArray> {
+        return new Promise((resolve, reject) => {
+            this.pool.getConnection((err: mysql.MysqlError, con: mysql.PoolConnection) => {
+                con.query(`SELECT * FROM data_suggestions`, (err, rows) => {
+                    if(err) reject(err)
+                    resolve(rows as SuggestionDataArray)
+                })
+                con.release()
+            })
+        })
+    }
+
+    async markAP(id:string, mid:string):Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.pool.getConnection((err: mysql.MysqlError, con: mysql.PoolConnection) => {
+                con.query(`UPDATE data_suggestions SET MsgID = '${mid}' WHERE ID = '${id}'`, (err, rows) => {
+                    if(err) reject(err)
+                })
+                if(err) reject(err)
+                resolve()
+                con.release()  
+            })
+            this.emit("markAP")
+        })
+    }
+
+    getPing():number {
+        let d = Date.now()
+        let sqp;
+        this.pool.getConnection((err, con) => {
+            con.ping((err) => {
+                if(err) throw err
+                sqp = Date.now()
+            })
+        })
+        return sqp - d
     }
 
     private _genID(count:number):string{
@@ -74,6 +117,22 @@ class SuggestionManager extends EventEmitter {
           result += chars[x];
         }
         return result;
+    }
+
+    private async _getDataPromise(id:string):Promise<SuggestionData> {
+        return new Promise((resolve, reject) => {
+            this.pool.getConnection((err: mysql.MysqlError, con: mysql.PoolConnection) => {
+                if(err) reject(err)
+                con.query(`SELECT * FROM data_suggestions WHERE ID='${id}'`, (err, rows) => {
+                    if(err) reject(err)
+                    resolve(rows[0] as SuggestionData)
+                })
+            })
+        })
+    }
+
+    private async _getData(id:string) {
+        return await this._getDataPromise(id)
     }
 }
 
@@ -89,8 +148,11 @@ interface SuggestionData {
     UserID: GuildMember["id"]
     Review: string
     Reviewer: string | GuildMember["id"]
-    Score: number
+    Score: number,
+    MsgID: string
 }
+
+type SuggestionDataArray = Array<SuggestionData>
 
 export = SuggestionManager
 

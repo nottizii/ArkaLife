@@ -19,7 +19,7 @@ module.exports = {
         const cmd = client.commands.get(command) || client.commands.find(c => c.aliases?.includes(command))
         if(cmd) {
             if(!cmd.permissions) return cmd.run(client, message, args);
-            if(message.member.permissions.has(cmd.permissions)) return cmd.run(client, message, args);
+            if(message.member.permissions.has(cmd.permissions, true)) return cmd.run(client, message, args);
             message.reply(erremb)
         }
     }

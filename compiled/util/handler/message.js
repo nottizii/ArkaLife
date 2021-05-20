@@ -21,7 +21,7 @@ module.exports = {
         if (cmd) {
             if (!cmd.permissions)
                 return cmd.run(client, message, args);
-            if (message.member.permissions.has(cmd.permissions))
+            if (message.member.permissions.has(cmd.permissions, true))
                 return cmd.run(client, message, args);
             message.reply(erremb);
         }

@@ -5,17 +5,17 @@
 
 //// variables ////
 import DisTube from "distube"
-import Discord from 'discord.js'
+import Discord, { TextChannel } from 'discord.js'
 require('dotenv').config()
 const settings = require('./storage/settings.json')
 const fs = require('fs')
 const chalk = require('chalk')
 import ArkaLifeError from "./util/errorEmmiter"
-import { Collection, Message, MessageEmbed, Structures } from "discord.js"
+import { Collection, Message, MessageEmbed, Structures, GuildMember } from "discord.js"
 import SuggestionManager from "./util/suggestionManager"
 import { ConnectionConfig } from "mysql"
 import { GiveawaysManager } from "discord-giveaways"
-import { disconnect } from "process"
+let d = new Date()
 
 Structures.extend("GuildMember", GuildMember => {
     class ArkaMember extends GuildMember {
@@ -82,7 +82,7 @@ client.giveawaysManager = new GiveawaysManager(client, {
 
 //// Event Handler ////
 client.once('ready', () => {
-    client.events.get("ready").run(client)    
+    client.events.get("ready").run(client)
 })
 
 client.on("message", async(message) => {
@@ -113,6 +113,50 @@ client.distube.on("empty", message => {
     )
 })
 
+client.suggestions.on("suggestionAdd", async(sugg: SuggestionData) => {
+    let ch = client.channels.cache.get(client.settings.suggch) as TextChannel
+    const e = new MessageEmbed()
+    .setTitle("Nueva Sugerencia!")
+    .setDescription(`Usuario: ${client.users.cache.get(sugg.UserID)?.tag ?? 'Desconocido!'}\nFecha: ${d.toUTCString()} $}`)
+    .addField("Sugerencia:", sugg.Text)
+    .addField("Respuesta:", "Aun sin respuesta!")
+    .setColor("YELLOW")
+    .setFooter(`${ch.guild.name} ▪ ${sugg.ID}`)
+    let m = await ch.send(e)
+    m.react("<:champ_downvote:844690963028115507>")
+    m.react("<:champ_upvote:844690963191431238>")
+
+    client.suggestions.markAP(sugg.ID, m.id)
+})
+
+client.suggestions.on("suggestionDelete", async(sugg: SuggestionData) => {
+    let ch = client.channels.cache.get(client.settings.suggch) as TextChannel
+    let m = await ch.messages.fetch(sugg.MsgID)
+    m.delete()
+})
+
+client.suggestions.on("suggestionReview", async(sugg: SuggestionData) => {
+    let ch = client.channels.cache.get(client.settings.suggch) as TextChannel
+    const e = new MessageEmbed()
+    .setTitle("Nueva Sugerencia!")
+    .setDescription(`Usuario: ${client.users.cache.get(sugg.UserID)?.tag ?? 'Desconocido!'}\nFecha: ${d.toUTCString()} $}`)
+    .addField("Sugerencia:", sugg.Text)
+    .setFooter(`${ch.guild.name} ▪ ${sugg.ID}`)
+    .addField("Respuesta:", `De: <@${sugg.Reviewer}> \n${sugg.Review}`)
+    let m = await ch.messages.fetch(sugg.MsgID)
+    if(sugg.Status === 0) {
+        e.setColor("RED")
+    }
+    if(sugg.Status === 1) {
+        e.setColor("GREEN")
+    }
+    m.edit(e)
+
+})
+
+client.suggestions.on("markAP", () => {
+    console.log("Nueva sugerencia publicada")
+})
 //// Event Handler ////
 
 //// Login :) ////
@@ -126,7 +170,8 @@ declare module 'discord.js' {
         suggestions: SuggestionManager,
         database: ConnectionConfig,
         giveawaysManager: GiveawaysManager,
-        settings: unknown,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        settings: any,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         events: any
     }
@@ -134,4 +179,15 @@ declare module 'discord.js' {
     interface GuildMember {
         isDJ(message): boolean
     }
+}
+
+interface SuggestionData {
+    ID: string
+    Status: number
+    Text: string
+    UserID: GuildMember["id"]
+    Review: string
+    Reviewer: string | GuildMember["id"]
+    Score: number,
+    MsgID: string
 }

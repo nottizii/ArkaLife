@@ -30,7 +30,6 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "@discordjs/collection": "github:discordjs/collection",
     "@discordjs/opus": "github:discordjs/opus",
     "@types/mysql": "^2.15.18",
     "chalk": "^4.1.1",

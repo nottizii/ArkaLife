@@ -9,29 +9,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 //// variables ////
 const distube_1 = __importDefault(require("distube"));
-const Discord = require('discord.js');
+const discord_js_1 = __importDefault(require("discord.js"));
 require('dotenv').config();
 const settings = require('./storage/settings.json');
 const fs = require('fs');
 const chalk = require('chalk');
 const errorEmmiter_1 = __importDefault(require("./util/errorEmmiter"));
-const discord_js_1 = require("discord.js");
+const discord_js_2 = require("discord.js");
 const suggestionManager_1 = __importDefault(require("./util/suggestionManager"));
 const discord_giveaways_1 = require("discord-giveaways");
-discord_js_1.Structures.extend("GuildMember", GuildMember => {
+let d = new Date();
+discord_js_2.Structures.extend("GuildMember", GuildMember => {
     class ArkaMember extends GuildMember {
         constructor(client, data, guild) {
             super(client, data, guild);
         }
         isDJ(message) {
-            return (this.roles.cache.find(r => r.name === 'DJ')) ? true : message.member.permissions.has("MANAGE_CHANNELS");
+            return (this.roles.cache.find(r => r.name === 'DJ')) ? true : message.member.permissions.has("MANAGE_CHANNELS", true);
         }
     }
     return ArkaMember;
 });
 //////////////////// Client ////////////////////
-const client = new Discord.Client({
-    intents: Discord.Intents.ALL,
+const client = new discord_js_1.default.Client({
+    intents: discord_js_1.default.Intents.ALL,
     partials: ["USER", "CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION"]
 });
 client.distube = new distube_1.default(client, {
@@ -50,7 +51,7 @@ client.suggestions = new suggestionManager_1.default(client.database);
 client.settings = settings;
 //////////////////// Client ////////////////////
 //////////////////// Event loader ////////////////////
-client.events = new Discord.Collection();
+client.events = new discord_js_1.default.Collection();
 const evendir = fs.readdirSync(__dirname + "/util/handler").filter((file) => file.endsWith(".js"));
 for (const ev of evendir) {
     const event = require("./util/handler/" + ev);
@@ -84,14 +85,53 @@ client.giveawaysManager.on("giveawayReactionRemoved", (giveaway, member, reactio
     console.log(`${member.user.tag} salió del sorteo #${giveaway.messageID} (${reaction.emoji.name})`);
 });
 client.distube.on("playSong", function (msg, queue, song) {
-    queue.initMessage.channel.send(new discord_js_1.MessageEmbed()
+    queue.initMessage.channel.send(new discord_js_2.MessageEmbed()
         .setDescription("Ahora reproduciendo: \n" + `[${song.name}](${song.url}) || \`${song.formattedDuration}\``)
         .setColor("GREEN"));
 });
 client.distube.on("empty", message => {
-    message.channel.send(new discord_js_1.MessageEmbed()
+    message.channel.send(new discord_js_2.MessageEmbed()
         .setDescription("Chat de voz vacio, saliendo...")
         .setColor("YELLOW"));
+});
+client.suggestions.on("suggestionAdd", async (sugg) => {
+    let ch = client.channels.cache.get(client.settings.suggch);
+    const e = new discord_js_2.MessageEmbed()
+        .setTitle("Nueva Sugerencia!")
+        .setDescription(`Usuario: ${client.users.cache.get(sugg.UserID)?.tag ?? 'Desconocido!'}\nFecha: ${d.toUTCString()} $}`)
+        .addField("Sugerencia:", sugg.Text)
+        .addField("Respuesta:", "Aun sin respuesta!")
+        .setColor("YELLOW")
+        .setFooter(`${ch.guild.name} ▪ ${sugg.ID}`);
+    let m = await ch.send(e);
+    m.react("<:champ_downvote:844690963028115507>");
+    m.react("<:champ_upvote:844690963191431238>");
+    client.suggestions.markAP(sugg.ID, m.id);
+});
+client.suggestions.on("suggestionDelete", async (sugg) => {
+    let ch = client.channels.cache.get(client.settings.suggch);
+    let m = await ch.messages.fetch(sugg.MsgID);
+    m.delete();
+});
+client.suggestions.on("suggestionReview", async (sugg) => {
+    let ch = client.channels.cache.get(client.settings.suggch);
+    const e = new discord_js_2.MessageEmbed()
+        .setTitle("Nueva Sugerencia!")
+        .setDescription(`Usuario: ${client.users.cache.get(sugg.UserID)?.tag ?? 'Desconocido!'}\nFecha: ${d.toUTCString()} $}`)
+        .addField("Sugerencia:", sugg.Text)
+        .setFooter(`${ch.guild.name} ▪ ${sugg.ID}`)
+        .addField("Respuesta:", `De: <@${sugg.Reviewer}> \n${sugg.Review}`);
+    let m = await ch.messages.fetch(sugg.MsgID);
+    if (sugg.Status === 0) {
+        e.setColor("RED");
+    }
+    if (sugg.Status === 1) {
+        e.setColor("GREEN");
+    }
+    m.edit(e);
+});
+client.suggestions.on("markAP", () => {
+    console.log("Nueva sugerencia publicada");
 });
 //// Event Handler ////
 //// Login :) ////

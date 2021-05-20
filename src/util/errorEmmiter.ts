@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js"
+import { Client, MessageEmbed } from "discord.js"
 
 class ArkaLifeError extends Error {
     constructor(name:string, message:string) {
