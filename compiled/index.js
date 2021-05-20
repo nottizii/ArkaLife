@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* global process */
 /* global __dirname */
-let __importDefault = (this && this.__importDefault) || function (mod) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -14,9 +14,10 @@ require('dotenv').config();
 const settings = require('./storage/settings.json');
 const fs = require('fs');
 const chalk = require('chalk');
-const { GiveawaysManager } = require('discord-giveaways');
-const errorEmmiter_1 = __importDefault(require("./util/handler/errorEmmiter"));
+const errorEmmiter_1 = __importDefault(require("./util/errorEmmiter"));
 const discord_js_1 = require("discord.js");
+const suggestionManager_1 = __importDefault(require("./util/suggestionManager"));
+const discord_giveaways_1 = require("discord-giveaways");
 discord_js_1.Structures.extend("GuildMember", GuildMember => {
     class ArkaMember extends GuildMember {
         constructor(client, data, guild) {
@@ -31,23 +32,22 @@ discord_js_1.Structures.extend("GuildMember", GuildMember => {
 //////////////////// Client ////////////////////
 const client = new Discord.Client({
     intents: Discord.Intents.ALL,
-    fetchAllMembers: true,
-    partials: ["USER", "CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION"],
-    presence: {
-        status: "idle",
-        afk: true,
-        activity: {
-            name: "Aun en beta!",
-            type: "watching"
-        }
-    }
+    partials: ["USER", "CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION"]
 });
 client.distube = new distube_1.default(client, {
     emitNewSongOnly: false,
     leaveOnEmpty: true,
     leaveOnStop: true
 });
+client.database = {
+    host: "51.222.29.111",
+    user: "u272_VjI7IPlU9A",
+    database: "s272_data",
+    password: "m2f51=t.2xLWm2c!LgRhgpwp"
+};
 client.errors = new errorEmmiter_1.default('MusicError', '❌');
+client.suggestions = new suggestionManager_1.default(client.database);
+client.settings = settings;
 //////////////////// Client ////////////////////
 //////////////////// Event loader ////////////////////
 client.events = new Discord.Collection();
@@ -59,7 +59,7 @@ for (const ev of evendir) {
 }
 //////////////////// Event loader ////////////////////
 //////////////////// Giveaways handling ////////////////////
-client.giveawaysManager = new GiveawaysManager(client, {
+client.giveawaysManager = new discord_giveaways_1.GiveawaysManager(client, {
     storage: "./storage/giveaways.json",
     updateCountdownEvery: 30000,
     default: {
@@ -90,7 +90,8 @@ client.distube.on("playSong", function (msg, queue, song) {
 });
 client.distube.on("empty", message => {
     message.channel.send(new discord_js_1.MessageEmbed()
-        .setDescription("Chat de voz vacio, saliendo..."));
+        .setDescription("Chat de voz vacio, saliendo...")
+        .setColor("YELLOW"));
 });
 //// Event Handler ////
 //// Login :) ////
