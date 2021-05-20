@@ -5,14 +5,17 @@
 
 //// variables ////
 import DisTube from "distube"
-const Discord = require('discord.js')
+import Discord from 'discord.js'
 require('dotenv').config()
 const settings = require('./storage/settings.json')
 const fs = require('fs')
 const chalk = require('chalk')
-const { GiveawaysManager } = require('discord-giveaways')
-import ArkaLifeError from "./util/handler/errorEmmiter"
-import { Message, MessageEmbed, Structures } from "discord.js"
+import ArkaLifeError from "./util/errorEmmiter"
+import { Collection, Message, MessageEmbed, Structures } from "discord.js"
+import SuggestionManager from "./util/suggestionManager"
+import { ConnectionConfig } from "mysql"
+import { GiveawaysManager } from "discord-giveaways"
+import { disconnect } from "process"
 
 Structures.extend("GuildMember", GuildMember => {
     class ArkaMember extends GuildMember {
@@ -20,7 +23,7 @@ Structures.extend("GuildMember", GuildMember => {
             super(client, data, guild)
         }
         isDJ(message: Message):boolean {
-            return (this.roles.cache.find(r => r.name === 'DJ')) ? true : message.member.permissions.has("MANAGE_CHANNELS")
+            return (this.roles.cache.find(r => r.name === 'DJ')) ? true : message.member.permissions.has("MANAGE_CHANNELS", true)
         }
     }
     return ArkaMember;
@@ -29,16 +32,7 @@ Structures.extend("GuildMember", GuildMember => {
 //////////////////// Client ////////////////////
 const client = new Discord.Client({
     intents: Discord.Intents.ALL,
-    fetchAllMembers: true,
-    partials: ["USER", "CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION"],
-    presence: {
-        status: "idle",
-        afk: true,
-        activity: {
-            name: "Aun en beta!",
-            type: "watching"
-        }
-    }
+    partials: ["USER", "CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION"]
 })
 
 client.distube = new DisTube(client, {
@@ -47,7 +41,16 @@ client.distube = new DisTube(client, {
     leaveOnStop: true
 })
 
+client.database = {
+    host: "51.222.29.111",
+    user: "u272_VjI7IPlU9A",
+    database: "s272_data",
+    password: "m2f51=t.2xLWm2c!LgRhgpwp"
+}
+
 client.errors = new ArkaLifeError('MusicError', '❌')
+client.suggestions = new SuggestionManager(client.database)
+client.settings = settings
 //////////////////// Client ////////////////////
 
 //////////////////// Event loader ////////////////////
@@ -106,6 +109,7 @@ client.distube.on("empty", message => {
     message.channel.send(
         new MessageEmbed()
         .setDescription("Chat de voz vacio, saliendo...")
+        .setColor("YELLOW")
     )
 })
 
@@ -118,7 +122,13 @@ client.login(process.env['TOKEN'])
 declare module 'discord.js' {
     interface Client {
         distube: DisTube,
-        errors: ArkaLifeError
+        errors: ArkaLifeError,
+        suggestions: SuggestionManager,
+        database: ConnectionConfig,
+        giveawaysManager: GiveawaysManager,
+        settings: unknown,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        events: any
     }
 
     interface GuildMember {
