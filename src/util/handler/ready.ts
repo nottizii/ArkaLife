@@ -2,6 +2,7 @@ import { Client } from "discord.js"
 import * as Discord from "discord.js"
 const chalk = require('chalk')
 import * as fs from "fs"
+import path from "path"
 
 module.exports = {
     name: "ready",
@@ -18,8 +19,8 @@ module.exports = {
         //let channel = client.channels.cache.get('843666233945882635') as TextChannel
         //channel.send(str)
         client.commands = new Discord.Collection();
-        const cmddir = fs.readdirSync("./commands").filter(file => file.endsWith(".js"))
-        const musicdir = fs.readdirSync("./commands/music").filter(file => file.endsWith(".js"))
+        const cmddir = fs.readdirSync(path.join(__dirname, "../../commands").split('\\').join('/')).filter(file => file.endsWith(".js"))
+        const musicdir = fs.readdirSync(path.join(__dirname, "../../commands/music").split('\\').join('/')).filter(file => file.endsWith(".js"))
 
         for(const cmd of cmddir) {
             const cmdfile = require("../../commands/"+cmd)

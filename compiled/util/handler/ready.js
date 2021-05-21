@@ -18,10 +18,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Discord = __importStar(require("discord.js"));
 const chalk = require('chalk');
 const fs = __importStar(require("fs"));
+const path_1 = __importDefault(require("path"));
 module.exports = {
     name: "ready",
     run: async (client) => {
@@ -36,8 +40,8 @@ module.exports = {
         //let channel = client.channels.cache.get('843666233945882635') as TextChannel
         //channel.send(str)
         client.commands = new Discord.Collection();
-        const cmddir = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
-        const musicdir = fs.readdirSync("./commands/music").filter(file => file.endsWith(".js"));
+        const cmddir = fs.readdirSync(path_1.default.join(__dirname, "../../commands").split('\\').join('/')).filter(file => file.endsWith(".js"));
+        const musicdir = fs.readdirSync(path_1.default.join(__dirname, "../../commands/music").split('\\').join('/')).filter(file => file.endsWith(".js"));
         for (const cmd of cmddir) {
             const cmdfile = require("../../commands/" + cmd);
             client.commands.set(cmdfile.name, cmdfile);
