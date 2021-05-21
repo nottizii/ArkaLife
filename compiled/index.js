@@ -34,7 +34,8 @@ discord_js_2.Structures.extend("GuildMember", GuildMember => {
 //////////////////// Client ////////////////////
 const client = new discord_js_1.default.Client({
     intents: discord_js_1.default.Intents.ALL,
-    partials: ["USER", "CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION"]
+    partials: ["USER", "CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION"],
+    debugMode: true
 });
 client.distube = new distube_1.default(client, {
     emitNewSongOnly: false,
@@ -78,6 +79,21 @@ client.once('ready', () => {
 });
 client.on("message", async (message) => {
     client.events.get("message").run(client, message);
+});
+client.on("rateLimit", rl => {
+    if (client.options.debugMode === false)
+        return;
+    console.log("[RATELIMIT] " + rl.route + " => " + rl.timeout);
+});
+client.on("warn", w => {
+    if (client.options.debugMode === false)
+        return;
+    console.warn("[WARN] " + w);
+});
+client.on("debug", d => {
+    if (client.options.debugMode === false)
+        return;
+    console.debug("[DEBUG] " + d);
 });
 client.on("guildMemberAdd", async (member) => {
     if (Math.floor(member.user.createdTimestamp - Date.now() / 86400000) > 30)

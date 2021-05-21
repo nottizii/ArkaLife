@@ -6,7 +6,7 @@ const { JSDOM } = jsdom;
 const dom = new JSDOM();
 const doc = dom.window.doc;
 module.exports = {
-    nombre: "saveticket",
+    name: "saveticket",
     alias: [],
     run: async function (client, message, args) {
         let mensaje;
@@ -24,9 +24,9 @@ module.exports = {
         }
         let now = message.channel.name;
         let msgs = messageCollection.array().reverse();
-        let data = await fs.readFile(__dirname + '../storage/transcripts/plantilla.html', 'utf8').catch(err => console.log(err));
+        let data = await fs.readFile(__dirname + '/../storage/transcripts/plantilla.html', 'utf8').catch(err => console.log(err));
         if (data) {
-            await fs.writeFile(__dirname + '../storage/transcripts/' + now + '.html', data).catch(err => console.log(err));
+            await fs.writeFile(__dirname + '/../storage/transcripts/' + now + '.html', data).catch(err => console.log(err));
             let guildElement = doc.createElement('div');
             guildElement.className = "info";
             let guildImg = doc.createElement('img');
@@ -49,7 +49,7 @@ module.exports = {
             guildElement.appendChild(spanName);
             guildElement.appendChild(spanTicket);
             guildElement.appendChild(spanCount);
-            await fs.appendFile(__dirname + '../storage/transcripts/' + now + '.html', guildElement.outerHTML).catch(err => console.log(err));
+            await fs.appendFile(__dirname + '/../storage/transcripts/' + now + '.html', guildElement.outerHTML).catch(err => console.log(err));
             msgs.forEach(async (msg) => {
                 let parentContainer = doc.createElement("div");
                 parentContainer.className = "parent-container";
@@ -80,7 +80,7 @@ module.exports = {
                     messageContainer.appendChild(msgNode);
                 }
                 parentContainer.appendChild(messageContainer);
-                await fs.appendFile(__dirname + '../storage/transcripts/' + now + '.html', parentContainer.outerHTML).catch(err => console.log(err));
+                await fs.appendFile(__dirname + '/../storage/transcripts/' + now + '.html', parentContainer.outerHTML).catch(err => console.log(err));
             });
         }
         setTimeout(() => {
