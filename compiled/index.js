@@ -18,6 +18,7 @@ const errorEmmiter_1 = __importDefault(require("./util/errorEmmiter"));
 const discord_js_2 = require("discord.js");
 const suggestionManager_1 = __importDefault(require("./util/suggestionManager"));
 const discord_giveaways_1 = require("discord-giveaways");
+const path_1 = __importDefault(require("path"));
 let d = new Date();
 discord_js_2.Structures.extend("GuildMember", GuildMember => {
     class ArkaMember extends GuildMember {
@@ -61,7 +62,7 @@ for (const ev of evendir) {
 //////////////////// Event loader ////////////////////
 //////////////////// Giveaways handling ////////////////////
 client.giveawaysManager = new discord_giveaways_1.GiveawaysManager(client, {
-    storage: "./storage/giveaways.json",
+    storage: path_1.default.join(__dirname, "./storage/giveaways.json"),
     updateCountdownEvery: 30000,
     default: {
         botsCanWin: false,

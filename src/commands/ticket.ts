@@ -1,12 +1,12 @@
 /* eslint-disable no-useless-escape */
 const Discord = require('discord.js');
-let cnf = require('../json/config.json');
+let cnf = require('../storage/settings.json');
 
 module.exports = {
     name: "ticket",
     alias: ["t"],
     run: async (client, message, args) => {
-        if(!message.content.startsWith(config.prefix)) return;
+        if(!message.content.startsWith(cnf.prefix)) return;
         
         /****************
          * List function
@@ -27,7 +27,7 @@ module.exports = {
                     return message.channel.send("Internal Error.");
                 } else { 
                     let embed = new Discord.MessageEmbed()
-                    .setColor(config.color)
+                    .setColor(cnf.color)
                     .setAuthor(message.guild.name, message.guild.iconURL());
                     if(!rows.length) {
                         message.channel.stopTyping();
@@ -125,10 +125,6 @@ module.exports = {
                         message.channel.updateOverwrite(member, {
                             SEND_MESSAGES: false,
                             VIEW_CHANNEL: false
-                        })
-                        message.channel.updateOverwrite(config.aprendiz_id, {
-                            SEND_MESSAGES: true,
-                            VIEW_CHANNEL: true
                         }).then(ch => {
                             ticket.open = 0;
                             client.tickets.set(ticket.user, ticket);
@@ -169,10 +165,6 @@ module.exports = {
                         message.channel.updateOverwrite(member, {
                             SEND_MESSAGES: true,
                             VIEW_CHANNEL: true
-                        })
-                        message.channel.updateOverwrite(config.aprendiz_id, {
-                            SEND_MESSAGES: false,
-                            VIEW_CHANNEL: true
                         }).then(ch => {
                             ticket.open = 1;
                             client.tickets.set(ticket.user, ticket);
@@ -211,7 +203,7 @@ module.exports = {
                 } else {
                     setTimeout(() => {
                         message.channel.delete().then(ch => {
-                            if(client.logsCh) client.logsCh.send(deleting.setDescription(`El ticket **#${message.channel.name}** de <@${ticket.user}> fue borrado.`).setColor(config.color));
+                            if(client.logsCh) client.logsCh.send(deleting.setDescription(`El ticket **#${message.channel.name}** de <@${ticket.user}> fue borrado.`).setColor(cnf.color));
                             client.tickets.delete(ticket.user);
                             connection.end();
                         });
@@ -265,7 +257,7 @@ module.exports = {
             })
         }
         let formatos = new Discord.MessageEmbed()
-        .setColor(config.color)
+        .setColor(cnf.color)
         .addField("Uso incorrecto!.");
         if(!args[0]) {
             message.channel.stopTyping();

@@ -16,6 +16,7 @@ import SuggestionManager from "./util/suggestionManager"
 import { ConnectionConfig } from "mysql"
 import { GiveawaysManager } from "discord-giveaways"
 import Canvas from 'canvas'
+import path from "path"
 let d = new Date()
 
 Structures.extend("GuildMember", GuildMember => {
@@ -69,7 +70,7 @@ for(const ev of evendir) {
 
 //////////////////// Giveaways handling ////////////////////
 client.giveawaysManager = new GiveawaysManager(client, {
-    storage: "./storage/giveaways.json",
+    storage: path.join(__dirname, "./storage/giveaways.json"),
     updateCountdownEvery: 30000,
     default: {
         botsCanWin: false,
