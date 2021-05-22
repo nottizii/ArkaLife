@@ -1,10 +1,10 @@
 const { MessageEmbed } = require("discord.js");
 const { prefix } = require('../../storage/settings.json')
-import { Message } from "discord.js";
+import { Message, Client } from "discord.js";
 
 module.exports = {
     name: "message",
-    run: async(client, message: Message) => {
+    run: async(client: Client, message: Message) => {
 
         const erremb = new MessageEmbed()
         .setDescription('Whoops, parece que no tienes permiso para hacer esto!')

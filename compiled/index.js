@@ -79,7 +79,7 @@ client.once('ready', () => {
     client.events.get("ready").run(client);
 });
 client.on("message", async (message) => {
-    client.events.get("message").run(client, message);
+    client.events.get("message").run(client, message).bind();
 });
 client.on("rateLimit", rl => {
     if (client.options.debugMode === false)

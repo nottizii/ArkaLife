@@ -5,13 +5,13 @@
 
 //// variables ////
 import DisTube from "distube"
-import Discord, { TextChannel } from 'discord.js'
+import Discord, { TextChannel, Collection } from 'discord.js'
 require('dotenv').config()
 const settings = require('./storage/settings.json')
 const fs = require('fs')
 const chalk = require('chalk')
 import ArkaLifeError from "./util/errorEmmiter"
-import { Message, MessageEmbed, Structures, GuildMember } from "discord.js"
+import { Message, MessageEmbed, Structures, GuildMember, Client } from "discord.js"
 import SuggestionManager from "./util/suggestionManager"
 import { ConnectionConfig } from "mysql"
 import { GiveawaysManager } from "discord-giveaways"
@@ -89,7 +89,7 @@ client.once('ready', () => {
 })
 
 client.on("message", async(message) => {
-    client.events.get("message").run(client, message)
+    client.events.get("message").run(client, message).bind()
 })
 
 client.on("rateLimit", rl => {
@@ -195,7 +195,8 @@ declare module 'discord.js' {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         settings: any,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        events: any,
+        events: Collection<Snowflake, ArkaCommand>,
+        commands: Collection<Snowflake, ArkaCommand>,
         logs: TextChannel
     }
 
@@ -217,4 +218,12 @@ interface SuggestionData {
     Reviewer: string | GuildMember["id"]
     Score: number,
     MsgID: string
+}
+
+interface ArkaCommand {
+    name: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    run: (any)
+    permissions?: []
+    aliases: Array<string>
 }

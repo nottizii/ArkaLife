@@ -7,7 +7,7 @@ import path from "path"
 
 module.exports = {
     name: "ready",
-    run: async(client) => {
+    run: async(client: Client) => {
         client.user.setPresence({
             activities: [{
                 name: "Aun en beta!"
