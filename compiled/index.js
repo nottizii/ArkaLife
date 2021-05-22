@@ -96,34 +96,7 @@ client.on("debug", d => {
     console.debug("[DEBUG] " + d);
 });
 client.on("guildMemberAdd", async (member) => {
-    if (Math.floor(member.user.createdTimestamp - Date.now() / 86400000) > 30)
-        return member.kick("El usuario no tenía 30 dias en discord");
-    /*let channel = client.channels.cache.get('844935680794689597') as TextChannel
-    const canvas = Canvas.createCanvas(700, 250);
-    const context = canvas.getContext('2d');
-    const background = await Canvas.loadImage('./storage/OIP.jpg');
-    context.drawImage(background, 0, 0, canvas.width, canvas.height);
-    context.strokeStyle = '#74037b';
-
-    context.strokeRect(0, 0, canvas.width, canvas.height);
-    context.font = '60px sans-serif';
-    // Select the style that will be used to fill the text in
-    context.fillStyle = '#ffffff';
-    // Actually fill the text with a solid color
-    context.fillText(member.displayName, canvas.width / 2.5, canvas.height / 1.8);
-    context.beginPath();
-    // Start the arc to form a circle
-    context.arc(125, 125, 100, 0, Math.PI * 2, true);
-    // Put the pen down
-    context.closePath();
-    // Clip off the region you drew on
-    context.clip();
-    const avatar = await Canvas.loadImage(member.user.displayAvatarURL({ format: 'jpg' }));
-    context.drawImage(avatar, 25, 25, 200, 200);
-    
-    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome.png');
-    channel.send(`Bienvenido al server ${member}"`, attachment)
-    */
+    client.events.get("guildMemberAdd").run(member);
 });
 client.giveawaysManager.on("giveawayReactionAdded", (giveaway, member, reaction) => {
     console.log(`${member.user.tag} entró al sorteo #${giveaway.messageID} (${reaction.emoji.name})`);
