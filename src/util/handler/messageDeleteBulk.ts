@@ -1,3 +1,5 @@
+/* global __dirname */
+
 import { Collection, Message, MessageEmbed, MessageAttachment, Snowflake } from "discord.js";
 import fs from 'fs'
 import path from "path";
