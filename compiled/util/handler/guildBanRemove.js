@@ -9,8 +9,8 @@ module.exports = {
         let embed = new discord_js_1.MessageEmbed()
             .setTitle("Miembro des-baneado")
             .setDescription(d.toUTCString())
-            .addField("Información:", `Username: ${member.user.tag}\nID: ${member.id}`)
-            .setThumbnail(member.user.displayAvatarURL());
+            .addField("Información:", `Username: ${member.tag}\nID: ${member.id}`)
+            .setThumbnail(member.displayAvatarURL());
         client.logs?.send(embed);
     }
 };
