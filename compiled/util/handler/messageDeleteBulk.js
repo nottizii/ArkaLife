@@ -1,6 +1,6 @@
 "use strict";
 /* global __dirname */
-let __importDefault = (this && this.__importDefault) || function (mod) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -18,6 +18,7 @@ module.exports = {
         });
         file.end();
         const log = new discord_js_1.MessageAttachment(path_1.default.join(__dirname, "../../storage") + 'messageDeleteBulk.txt');
-        client.logs?.send(log);
+        let logs = client.channels.cache.get('845436480570261554');
+        logs?.send(log);
     }
 };

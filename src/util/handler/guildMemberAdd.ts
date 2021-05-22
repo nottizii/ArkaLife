@@ -13,7 +13,8 @@ module.exports = {
         .addField("Username:", member.user.tag)
         .addField("Creado:", member.user.createdAt)
         .setThumbnail(member.user.displayAvatarURL())
-        client.logs?.send(e)
+        let logs = client.channels.cache.get('845436480570261554') as TextChannel
+        logs?.send(e)
         /////
         function applyText(canvas, text) {
             const context = canvas.getContext('2d');

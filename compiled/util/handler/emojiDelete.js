@@ -12,6 +12,7 @@ module.exports = {
             .setDescription(d.toUTCString())
             .addField("Información:", `Nombre: ${emoji.name} \nID: ${emoji.id}\nAnimado?:${emoji.animated ? 'Si' : 'No'} \nIdentificador: \`${emoji.identifier}\``)
             .setImage(emoji.url);
-        client.logs?.send(embed);
+        let logs = client.channels.cache.get('845436480570261554');
+        logs?.send(embed);
     }
 };

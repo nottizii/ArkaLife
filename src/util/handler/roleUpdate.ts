@@ -1,8 +1,9 @@
+import { TextChannel } from "discord.js";
 import { Role , MessageEmbed, EmbedFieldData } from "discord.js";
 let d = new Date()
 
 module.exports = {
-    name: "roleCreate",
+    name: "roleUpdate",
     run: async (role: Role, newR: Role) => {
         let client = role.client
         let arr: EmbedFieldData[] = []
@@ -15,6 +16,7 @@ module.exports = {
         .setTitle("Rol edotado")
         .setDescription(d.toUTCString())
         .addFields(arr)
-        client.logs?.send(e)
+        let logs = client.channels.cache.get('845436480570261554') as TextChannel
+        logs?.send(e)
     }
 }

@@ -11,6 +11,7 @@ module.exports = {
             .setDescription(d.toUTCString())
             .setThumbnail(member.user.displayAvatarURL())
             .addField(`Datos:`, `\nID: ${member.id}\nUsername:${member.user.tag}`);
-        client.logs?.send(embed);
+        let logs = client.channels.cache.get('845436480570261554');
+        logs?.send(embed);
     }
 };

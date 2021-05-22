@@ -1,3 +1,4 @@
+import { TextChannel } from "discord.js";
 import { Role , MessageEmbed } from "discord.js";
 let d = new Date()
 
@@ -15,6 +16,7 @@ module.exports = {
             { name: 'Posición', value: role.position, inline: true },
             { name: 'Rol', value: role.toString(), inline: true }
         ])
-        client.logs.send(e)
+        let logs = client.channels.cache.get('845436480570261554') as TextChannel
+        logs?.send(e)
     }
 }

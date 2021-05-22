@@ -19,6 +19,7 @@ module.exports = {
             .setTitle("Servidor actualizado")
             .setDescription(d.toUTCString())
             .addFields(chg);
-        client.logs?.send(embed);
+        let logs = client.channels.cache.get('845436480570261554');
+        logs?.send(embed);
     }
 };

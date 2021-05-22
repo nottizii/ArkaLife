@@ -6,6 +6,7 @@ module.exports = {
     name: "channelDelete",
     run: async (channel) => {
         let client = channel.client;
+        let logs = client.channels.cache.get('845436480570261554');
         let e = new discord_js_1.MessageEmbed()
             .setTitle("Canal eliminado!")
             .setDescription(d.toUTCString())
@@ -14,6 +15,6 @@ module.exports = {
             .addField("ID:", channel.id)
             .setFooter(":)")
             .setAuthor(channel.guild.me.displayName, client.user.displayAvatarURL({ size: 512 }));
-        return client.logs?.send(e);
+        return logs?.send(e);
     }
 };

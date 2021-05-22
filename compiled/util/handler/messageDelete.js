@@ -10,6 +10,7 @@ module.exports = {
             .setTitle("Mensaje eliminado!")
             .setDescription(d.toUTCString())
             .addField("Contenido:", message.content ?? "Error: No pude recuperar el contenido");
-        client.logs?.send(e);
+        let logs = client.channels.cache.get('845436480570261554');
+        logs?.send(e);
     }
 };

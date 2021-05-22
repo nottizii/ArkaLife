@@ -110,7 +110,7 @@ class SuggestionManager extends EventEmitter {
     }
 
     private _genID(count:number):string{
-        let chars = 'acdefhiklmnoqrstuvwxyz0123456789'.split('');
+        let chars = 'acdefhiklmnoqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV0123456789'.split('');
         let result = '';
         for(let i=0; i<count; i++){
           let x = Math.floor(Math.random() * chars.length);

@@ -1,3 +1,4 @@
+import { TextChannel } from "discord.js";
 import { Message, MessageEmbed } from "discord.js";
 let d = new Date()
 
@@ -9,6 +10,7 @@ module.exports = {
         .setTitle("Mensaje eliminado!")
         .setDescription(d.toUTCString())
         .addField("Contenido:", message.content ?? "Error: No pude recuperar el contenido")
-        client.logs?.send(e)
+        let logs = client.channels.cache.get('845436480570261554') as TextChannel
+        logs?.send(e)
     }
 }

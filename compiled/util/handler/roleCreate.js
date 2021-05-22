@@ -16,6 +16,7 @@ module.exports = {
             { name: 'Posición', value: role.position, inline: true },
             { name: 'Rol', value: role.toString(), inline: true }
         ]);
-        client.logs.send(e);
+        let logs = client.channels.cache.get('845436480570261554');
+        logs?.send(e);
     }
 };

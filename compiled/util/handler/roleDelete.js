@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 let d = new Date();
 module.exports = {
-    name: "roleCreate",
+    name: "roleDelete",
     run: async (role) => {
         let client = role.client;
         const e = new discord_js_1.MessageEmbed()
@@ -16,6 +16,7 @@ module.exports = {
             { name: 'Posición', value: role.position, inline: true },
             { name: 'ID', value: role.id, inline: true }
         ]);
-        client.logs.send(e);
+        let logs = client.channels.cache.get('845436480570261554');
+        logs?.send(e);
     }
 };

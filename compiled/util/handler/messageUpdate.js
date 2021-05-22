@@ -14,6 +14,8 @@ module.exports = {
             mp = "No he podido recuperar la data del antiguo mensaje!";
         if (!oldM.partial)
             mp = oldM.content;
+        if (!newM.partial)
+            nm = newM.content;
         if (oldM.content.length > 1024)
             mp = "El contenido del mensaje era demasiado largo!";
         if (newM.content.length > 1024)
@@ -23,6 +25,7 @@ module.exports = {
             .addField("Antes:", mp, true)
             .addField("Despues:", nm, true)
             .setDescription(d.toUTCString());
-        client.logs?.send(e);
+        let logs = client.channels.cache.get('845436480570261554');
+        logs?.send(e);
     }
 };

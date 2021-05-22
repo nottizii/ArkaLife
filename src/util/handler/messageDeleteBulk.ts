@@ -1,5 +1,6 @@
 /* global __dirname */
 
+import { TextChannel } from "discord.js";
 import { Collection, Message, MessageEmbed, MessageAttachment, Snowflake } from "discord.js";
 import fs from 'fs'
 import path from "path";
@@ -15,6 +16,7 @@ module.exports = {
         })
         file.end()
         const log = new MessageAttachment(path.join(__dirname, "../../storage") + 'messageDeleteBulk.txt')
-        client.logs?.send(log)
+        let logs = client.channels.cache.get('845436480570261554') as TextChannel
+        logs?.send(log)
     }
 }

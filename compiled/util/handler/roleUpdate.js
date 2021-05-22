@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
 let d = new Date();
 module.exports = {
-    name: "roleCreate",
+    name: "roleUpdate",
     run: async (role, newR) => {
         let client = role.client;
         let arr = [];
@@ -20,6 +20,7 @@ module.exports = {
             .setTitle("Rol edotado")
             .setDescription(d.toUTCString())
             .addFields(arr);
-        client.logs?.send(e);
+        let logs = client.channels.cache.get('845436480570261554');
+        logs?.send(e);
     }
 };

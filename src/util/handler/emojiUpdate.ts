@@ -1,8 +1,9 @@
+import { TextChannel } from "discord.js";
 import { GuildEmoji, MessageEmbed } from "discord.js";
 let d = new Date()
 
 module.exports = {
-    name: "emojiCreate",
+    name: "emojiUpdate",
     run: async (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => {
         let author = await oldEmoji.fetchAuthor()
         let client = oldEmoji.client
@@ -11,6 +12,7 @@ module.exports = {
         .setDescription(d.toUTCString())
         .addField("Información:", `Nombre: ${oldEmoji.name} => ${newEmoji.name}\nID: ${newEmoji.id}\nAnimado?:${newEmoji.animated ? 'Si' : 'No'} \nIdentificador: \`${newEmoji.identifier}\``)
         .setImage(newEmoji.url)
-        client.logs?.send(embed)
+        let logs = client.channels.cache.get('845436480570261554') as TextChannel
+        logs?.send(embed)
     }
 }

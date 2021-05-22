@@ -1,3 +1,4 @@
+import { TextChannel } from "discord.js";
 import { MessageEmbed, GuildChannel } from "discord.js";
 let d = new Date()
 
@@ -5,9 +6,9 @@ module.exports = {
     name: "channelUpdate",
     run: async (oldCh: GuildChannel, newCh: GuildChannel) => {
         let client = newCh.client
+        let logs = client.channels.cache.get('845436480570261554') as TextChannel
         let changes = []
         if(oldCh.name !== newCh.name) return changes.push({ updated: 'Nombre', old: oldCh.name, newC: newCh.name })
-        if(oldCh.parent !== newCh.parent) return changes.push({ updated: 'Categoría', old: oldCh.parent.name, newC: newCh.parent.name })
         if(oldCh.permissionsLocked !== newCh.permissionsLocked) return changes.push({ updated: 'Permisos sincronizados', old: oldCh.permissionsLocked ? 'Si' : 'No', newC: newCh.permissionsLocked ? 'Si' : 'No' })
         if(oldCh.rawPosition !== newCh.rawPosition) return changes.push({ updated: 'Orden', old: oldCh.rawPosition, newC: newCh.rawPosition })
         if(oldCh.type !== newCh.type) return changes.push({ updated: 'Tipo', old: oldCh.type, newC: newCh.type })
@@ -18,8 +19,8 @@ module.exports = {
         .setFooter(":)")
         .setAuthor(newCh.guild.me.displayName, client.user.displayAvatarURL({ size: 512 }))
         changes.forEach(change => {
-            e.addField(change.updated, change.old + ' => ' + change.new)
+            e.addField(change.updated, change.old + ' => ' + change.newC)
         })
-        client.logs?.send(e)
+        return logs?.send(e)
     }
 }
