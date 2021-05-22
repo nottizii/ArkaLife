@@ -1,3 +1,4 @@
+/* global __dirname */
 const discord = require('discord.js');
 const { transcriptch } = require('../storage/settings.json');
 const fs = require('fs').promises;

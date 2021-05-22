@@ -3,6 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/* global __dirname */
+const discord_js_1 = require("discord.js");
 const canvas_1 = __importDefault(require("canvas"));
 const path_1 = __importDefault(require("path"));
 module.exports = {
@@ -28,7 +30,7 @@ module.exports = {
         let channel = client.channels.cache.get('844935680794689597');
         const canvas = canvas_1.default.createCanvas(700, 250);
         const context = canvas.getContext('2d');
-        const background = await canvas_1.default.loadImage(path_1.default.join(__dirname, './storage/OIP.jpg'));
+        const background = await canvas_1.default.loadImage(path_1.default.join(__dirname, '../../storage/OIP.jpg'));
         context.drawImage(background, 0, 0, canvas.width, canvas.height);
         context.strokeStyle = '#74037b';
         context.strokeRect(0, 0, canvas.width, canvas.height);
@@ -47,7 +49,7 @@ module.exports = {
         context.clip();
         const avatar = await canvas_1.default.loadImage(member.user.displayAvatarURL({ format: 'jpg' }));
         context.drawImage(avatar, 25, 25, 200, 200);
-        const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome.png');
+        const attachment = new discord_js_1.MessageAttachment(canvas.toBuffer(), 'welcome.png');
         channel.send(`Bienvenido al server, ${member}`, attachment);
     }
 };

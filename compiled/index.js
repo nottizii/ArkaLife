@@ -51,6 +51,7 @@ client.database = {
 client.errors = new errorEmmiter_1.default('MusicError', '❌');
 client.suggestions = new suggestionManager_1.default(client.database);
 client.settings = settings;
+client.logs = client.channels.cache.get('845436480570261554');
 //////////////////// Client ////////////////////
 //////////////////// Event loader ////////////////////
 client.events = new discord_js_1.default.Collection();
@@ -118,7 +119,7 @@ client.suggestions.on("suggestionAdd", async (sugg) => {
     let ch = client.channels.cache.get(client.settings.suggch);
     const e = new discord_js_2.MessageEmbed()
         .setTitle("Nueva Sugerencia!")
-        .setDescription(`Usuario: ${client.users.cache.get(sugg.UserID)?.tag ?? 'Desconocido!'}\nFecha: ${d.toUTCString()} $}`)
+        .setDescription(`Usuario: ${client.users.cache.get(sugg.UserID)?.tag ?? 'Desconocido!'}\nFecha: ${d.toUTCString()}`)
         .addField("Sugerencia:", sugg.Text)
         .addField("Respuesta:", "Aun sin respuesta!")
         .setColor("YELLOW")

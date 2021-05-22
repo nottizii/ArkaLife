@@ -1,3 +1,4 @@
+/* global __dirname */
 import { Client } from "discord.js"
 import * as Discord from "discord.js"
 const chalk = require('chalk')

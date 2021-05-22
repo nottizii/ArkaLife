@@ -1,4 +1,5 @@
-import { GuildMember, TextChannel } from "discord.js";
+/* global __dirname */
+import { GuildMember, TextChannel, MessageAttachment } from "discord.js";
 import Canvas from "canvas"
 import path from "path"
 
@@ -27,7 +28,7 @@ module.exports = {
         let channel = client.channels.cache.get('844935680794689597') as TextChannel
         const canvas = Canvas.createCanvas(700, 250);
         const context = canvas.getContext('2d');
-        const background = await Canvas.loadImage(path.join(__dirname, './storage/OIP.jpg'));
+        const background = await Canvas.loadImage(path.join(__dirname, '../../storage/OIP.jpg'));
         context.drawImage(background, 0, 0, canvas.width, canvas.height);
         context.strokeStyle = '#74037b';
 
@@ -48,7 +49,7 @@ module.exports = {
         const avatar = await Canvas.loadImage(member.user.displayAvatarURL({ format: 'jpg' }));
         context.drawImage(avatar, 25, 25, 200, 200);
         
-        const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome.png');
+        const attachment = new MessageAttachment(canvas.toBuffer(), 'welcome.png');
         channel.send(`Bienvenido al server, ${member}`, attachment)
     }
 }

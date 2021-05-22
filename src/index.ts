@@ -11,11 +11,10 @@ const settings = require('./storage/settings.json')
 const fs = require('fs')
 const chalk = require('chalk')
 import ArkaLifeError from "./util/errorEmmiter"
-import { Collection, Message, MessageEmbed, Structures, GuildMember } from "discord.js"
+import { Message, MessageEmbed, Structures, GuildMember } from "discord.js"
 import SuggestionManager from "./util/suggestionManager"
 import { ConnectionConfig } from "mysql"
 import { GiveawaysManager } from "discord-giveaways"
-import Canvas from 'canvas'
 import path from "path"
 let d = new Date()
 
@@ -54,6 +53,7 @@ client.database = {
 client.errors = new ArkaLifeError('MusicError', '❌')
 client.suggestions = new SuggestionManager(client.database)
 client.settings = settings
+client.logs = client.channels.cache.get('845436480570261554') as TextChannel
 //////////////////// Client ////////////////////
 
 //////////////////// Event loader ////////////////////
@@ -139,7 +139,7 @@ client.suggestions.on("suggestionAdd", async(sugg: SuggestionData) => {
     let ch = client.channels.cache.get(client.settings.suggch) as TextChannel
     const e = new MessageEmbed()
     .setTitle("Nueva Sugerencia!")
-    .setDescription(`Usuario: ${client.users.cache.get(sugg.UserID)?.tag ?? 'Desconocido!'}\nFecha: ${d.toUTCString()} $}`)
+    .setDescription(`Usuario: ${client.users.cache.get(sugg.UserID)?.tag ?? 'Desconocido!'}\nFecha: ${d.toUTCString()}`)
     .addField("Sugerencia:", sugg.Text)
     .addField("Respuesta:", "Aun sin respuesta!")
     .setColor("YELLOW")
@@ -174,7 +174,7 @@ client.suggestions.on("suggestionReview", async(sugg: SuggestionData) => {
     }
     m.edit(e)
 
-})
+});
 
 client.suggestions.on("markAP", () => {
     console.log("Nueva sugerencia publicada")
@@ -195,7 +195,8 @@ declare module 'discord.js' {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         settings: any,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        events: any
+        events: any,
+        logs: TextChannel
     }
 
     interface GuildMember {
