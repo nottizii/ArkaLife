@@ -4,7 +4,7 @@ let d = new Date()
 module.exports = {
     name: "guildMemberUpdate",
     run: async (oldM: GuildMember, newM: GuildMember) => {
-        if(oldM.roles.cache !== newM.roles.cache) return;
+        if(oldM.roles.cache == newM.roles.cache || oldM.displayName == newM.displayName) return;
         let olddiff = oldM.roles.cache.filter(r => !newM.roles.cache.has(r.id))
         let newdiff = newM.roles.cache.filter(r => !oldM.roles.cache.has(r.id))
 
@@ -19,9 +19,19 @@ module.exports = {
         .addFields([
             { name: "Miembro:", value: newM.toString, inline: true},
             { name: "Antes:", value: oldstr, inline: true},
-            { name: "Ahora:", value: oldstr, inline: true}
+            { name: "Ahora:", value: newstr, inline: true}
         ])
         .setThumbnail(newM.user.displayAvatarURL())
         newM.client.logs?.send(embed)
+        if(oldM.displayName !== newM.displayName) {
+            let e = new MessageEmbed()
+            .setTitle("Nombre actualizado!")
+            .setThumbnail(newM.user.displayAvatarURL())
+            .addFields([
+                { name: "Antes", value: oldM.displayName, inline: true },
+                { name: "Ahora", value: newM.displayName, inline: true }
+            ])
+            newM.client.logs?.send(e)
+        }
     }
 }
