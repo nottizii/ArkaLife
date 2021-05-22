@@ -10,7 +10,7 @@ module.exports = {
         let embed = new discord_js_1.MessageEmbed()
             .setTitle("oldEmoji Actualizado")
             .setDescription(d.toUTCString())
-            .addField("Información:", `Nombre: ${oldEmoji.name} => ${newEmoji.name}\nID: ${oldEmoji.id}\nAnimado?:${oldEmoji.animated ? 'Si' : 'No'} \nIdentificador: \`${oldEmoji.identifier}\``)
+            .addField("Información:", `Nombre: ${oldEmoji.name} => ${newEmoji.name}\nID: ${newEmoji.id}\nAnimado?:${newEmoji.animated ? 'Si' : 'No'} \nIdentificador: \`${newEmoji.identifier}\``)
             .setImage(newEmoji.url);
         client.logs?.send(embed);
     }

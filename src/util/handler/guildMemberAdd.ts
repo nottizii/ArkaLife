@@ -1,11 +1,19 @@
 /* global __dirname */
-import { GuildMember, TextChannel, MessageAttachment } from "discord.js";
+import { GuildMember, TextChannel, MessageAttachment, MessageEmbed } from "discord.js";
 import Canvas from "canvas"
 import path from "path"
 
 module.exports = {
     name: "guildMemberAdd",
     run: async (member: GuildMember) => {
+        /////
+        let client = member.client
+        const e = new MessageEmbed()
+        .setTitle("Nuevo miembro!")
+        .addField("Username:", member.user.tag)
+        .addField("Creado:", member.user.createdAt)
+        .setThumbnail(member.user.displayAvatarURL())
+        client.logs?.send(e)
         /////
         function applyText(canvas, text) {
             const context = canvas.getContext('2d');
@@ -23,7 +31,6 @@ module.exports = {
             return context.font;
         }
         /////
-        let client = member.client
         if(Math.floor(Math.floor(Date.now() - member.user.createdTimestamp) / 86400000) < 30) return member.kick("El usuario no tenía 30 dias en discord")
         let channel = client.channels.cache.get('844935680794689597') as TextChannel
         const canvas = Canvas.createCanvas(700, 250);
