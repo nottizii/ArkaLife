@@ -19,9 +19,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.suggestionManager = void 0;
 const events_1 = require("events");
 const mysql = __importStar(require("mysql"));
-class SuggestionManager extends events_1.EventEmitter {
+class suggestionManager extends events_1.EventEmitter {
     constructor(database) {
         super();
         this.dbdata = database;
@@ -115,17 +116,18 @@ class SuggestionManager extends events_1.EventEmitter {
             this.emit("markAP");
         });
     }
-    getPing() {
-        let d = Date.now();
-        let sqp;
-        this.pool.getConnection((err, con) => {
-            con.ping((err) => {
-                if (err)
-                    throw err;
-                sqp = Date.now();
+    async getPing() {
+        return new Promise((resolve, reject) => {
+            let d = Date.now();
+            this.pool.getConnection(async (err, con) => {
+                await con.ping((err) => {
+                    if (err)
+                        throw err;
+                    let sqp = Date.now();
+                    resolve(Math.floor(sqp - d));
+                });
             });
         });
-        return sqp - d;
     }
     _genID(count) {
         let chars = 'acdefhiklmnoqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV0123456789'.split('');
@@ -153,5 +155,5 @@ class SuggestionManager extends events_1.EventEmitter {
         return await this._getDataPromise(id);
     }
 }
-exports.default = SuggestionManager;
-module.exports = { SuggestionManager };
+exports.suggestionManager = suggestionManager;
+module.exports = { suggestionManager };

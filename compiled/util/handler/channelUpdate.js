@@ -22,7 +22,8 @@ module.exports = {
             .setTitle("Canal Actualizado!")
             .setDescription(d.toUTCString())
             .setFooter(":)")
-            .setAuthor(newCh.guild.me.displayName, client.user.displayAvatarURL({ size: 512 }));
+            .setAuthor(newCh.guild.me.displayName, client.user.displayAvatarURL({ size: 512 }))
+            .addField("Canal:", newCh.toString());
         changes.forEach(change => {
             e.addField(change.updated, change.old + ' => ' + change.newC);
         });

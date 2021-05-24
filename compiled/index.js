@@ -16,11 +16,11 @@ const fs = require('fs');
 const chalk = require('chalk');
 const errorEmmiter_1 = __importDefault(require("./util/errorEmmiter"));
 const discord_js_2 = require("discord.js");
-const suggestionManager_1 = __importDefault(require("./util/suggestionManager"));
+const suggestionManager_1 = require("./util/suggestionManager");
 const discord_giveaways_1 = require("discord-giveaways");
 const path_1 = __importDefault(require("path"));
 const ArkaClient_1 = require("./util/ArkaClient");
-const warnManager_1 = __importDefault(require("./util/warnManager"));
+const warnManager_1 = require("./util/warnManager");
 let d = new Date();
 discord_js_2.Structures.extend("GuildMember", GuildMember => {
     class ArkaMember extends GuildMember {
@@ -51,8 +51,8 @@ client.database = {
     password: "=@84q9S=Mw^yv0XQqJtKI@by"
 };
 client.errors = new errorEmmiter_1.default('MusicError', '❌');
-client.suggestions = new suggestionManager_1.default(client.database);
-client.warns = new warnManager_1.default(client.database);
+client.suggestions = new suggestionManager_1.suggestionManager(client.database);
+client.warns = new warnManager_1.warningManager(client.database);
 client.settings = settings;
 //////////////////// Client ////////////////////
 //////////////////// Event loader ////////////////////
@@ -77,7 +77,7 @@ client.giveawaysManager = new discord_giveaways_1.GiveawaysManager(client, {
 //////////////////// Giveaways handling ////////////////////
 //// variables ////
 //// Event Handler ////
-client.once('ready', () => {
+client.once('ready', async () => {
     client.events.get("ready").run(client);
 });
 client.on("message", async (message) => {

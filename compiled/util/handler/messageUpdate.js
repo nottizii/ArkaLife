@@ -14,12 +14,12 @@ module.exports = {
             mp = "No he podido recuperar la data del antiguo mensaje!";
         if (!oldM.partial)
             mp = oldM.content;
-        if (!newM.partial)
-            nm = newM.content;
-        if (oldM.content.length > 1024)
+        if (!oldM.partial && oldM.content.length > 1024)
             mp = "El contenido del mensaje era demasiado largo!";
         if (newM.content.length > 1024)
             nm = "El contenido del mensaje era demasiado largo!";
+        if (newM.content.length <= 1024)
+            nm = newM.content;
         const e = new discord_js_1.MessageEmbed()
             .setTitle("Mensaje actualizado!")
             .addField("Antes:", mp, true)

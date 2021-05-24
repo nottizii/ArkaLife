@@ -2,7 +2,7 @@ import { GuildMember } from 'discord.js'
 import { EventEmitter } from 'events'
 import * as mysql from 'mysql'
 
-export default class SuggestionManager extends EventEmitter {
+export class suggestionManager extends EventEmitter {
     dbdata: mysql.ConnectionConfig
     pool: mysql.Pool
     suggID: string
@@ -97,16 +97,17 @@ export default class SuggestionManager extends EventEmitter {
         })
     }
 
-    getPing():number {
-        let d = Date.now()
-        let sqp;
-        this.pool.getConnection((err, con) => {
-            con.ping((err) => {
-                if(err) throw err
-                sqp = Date.now()
+    async getPing():Promise<number> {
+        return new Promise((resolve, reject) => {
+            let d = Date.now()
+            this.pool.getConnection(async(err, con) => {
+                await con.ping((err) => {
+                    if(err) throw err
+                    let sqp = Date.now()
+                    resolve(Math.floor(sqp - d))
+                })
             })
         })
-        return sqp - d
     }
 
     private _genID(count:number):string{
@@ -154,4 +155,4 @@ interface SuggestionData {
 
 type SuggestionDataArray = Array<SuggestionData>
 
-module.exports = { SuggestionManager }
+module.exports = { suggestionManager }

@@ -19,9 +19,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.warningManager = void 0;
 const events_1 = require("events");
 const mysql = __importStar(require("mysql"));
-class WarningManager extends events_1.EventEmitter {
+class warningManager extends events_1.EventEmitter {
     constructor(database) {
         super();
         this.dbdata = database;
@@ -41,7 +42,7 @@ class WarningManager extends events_1.EventEmitter {
             this.pool.getConnection(async (err, con) => {
                 if (err)
                     reject(err);
-                con.query(`INSERT INTO  data_warnings (ID, Staff, User, Reason, Date, MID) VALUES('${this.wid}', ${Staff.id}, ${User.id}, ${Reason}, '${this.date.toUTCString()}', '${message.id}')`, async (err) => {
+                con.query(`INSERT INTO  data_warnings (ID, Staff, User, Reason, Date, MID) VALUES('${this.wid}', '${Staff.id}', '${User.id}', '${Reason}', '${this.date.toUTCString()}', '${message.id}')`, async (err) => {
                     if (err)
                         reject(err);
                     resolve(await this._getData(this.wid));
@@ -64,9 +65,22 @@ class WarningManager extends events_1.EventEmitter {
                 con.query(`DELETE FROM data_warnings WHERE ID='${id}'`, async (err) => {
                     if (err)
                         reject(err);
-                    resolve(await this._getData(id));
+                    resolve(id);
                 });
-                this.emit("warnDelete", await this._getData(id));
+                this.emit("warnDelete", id);
+            });
+        });
+    }
+    async getPing() {
+        return new Promise((resolve, reject) => {
+            let d = Date.now();
+            this.pool.getConnection(async (err, con) => {
+                await con.ping((err) => {
+                    if (err)
+                        throw err;
+                    let sqp = Date.now();
+                    resolve(Math.floor(sqp - d));
+                });
             });
         });
     }
@@ -96,5 +110,5 @@ class WarningManager extends events_1.EventEmitter {
         return await this._getDataPromise(id);
     }
 }
-exports.default = WarningManager;
-module.exports = { WarningManager };
+exports.warningManager = warningManager;
+module.exports = { warningManager };

@@ -2,7 +2,7 @@ import { GuildMember, Message } from 'discord.js'
 import { EventEmitter } from 'events'
 import * as mysql from 'mysql'
 
-export default class WarningManager extends EventEmitter {
+export class warningManager extends EventEmitter {
     dbdata: mysql.ConnectionConfig
     pool: mysql.Pool
     wid?: string
@@ -26,7 +26,7 @@ export default class WarningManager extends EventEmitter {
         return new Promise((resolve, reject) => {
             this.pool.getConnection(async(err, con) => {
                 if(err) reject(err)
-                con.query(`INSERT INTO  data_warnings (ID, Staff, User, Reason, Date, MID) VALUES('${this.wid}', ${Staff.id}, ${User.id}, ${Reason}, '${this.date.toUTCString()}', '${message.id}')`, async(err) => {
+                con.query(`INSERT INTO  data_warnings (ID, Staff, User, Reason, Date, MID) VALUES('${this.wid}', '${Staff.id}', '${User.id}', '${Reason}', '${this.date.toUTCString()}', '${message.id}')`, async(err) => {
                     if(err) reject(err)
                     resolve(await this._getData(this.wid))
                 })
@@ -42,15 +42,28 @@ export default class WarningManager extends EventEmitter {
         })
     }
 
-    async deleteWarn(id:string):Promise<WarnData> {
+    async deleteWarn(id:string):Promise<string> {
         return new Promise((resolve, reject) => {
             this.pool.getConnection(async(err, con) => {
                 if(err) reject(err)
                 con.query(`DELETE FROM data_warnings WHERE ID='${id}'`, async(err) => {
                     if(err) reject(err)
-                    resolve(await this._getData(id))
+                    resolve(id)
                 })
-                this.emit("warnDelete", await this._getData(id))
+                this.emit("warnDelete", id)
+            })
+        })
+    }
+
+    async getPing():Promise<number> {
+        return new Promise((resolve, reject) => {
+            let d = Date.now()
+            this.pool.getConnection(async(err, con) => {
+                await con.ping((err) => {
+                    if(err) throw err
+                    let sqp = Date.now()
+                    resolve(Math.floor(sqp - d))
+                })
             })
         })
     }
@@ -91,4 +104,4 @@ interface WarnData {
     MID: string
 }
 
-module.exports = { WarningManager }
+module.exports = { warningManager }

@@ -11,7 +11,7 @@ module.exports = {
         if (!message.mentions.members.first() && !message.guild.members.cache.get(args[0]))
             return message.reply(client.errors.makeEmbed("Usuario invalido!"));
         let warned = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        let { ID } = await client.warns.addWarn(message.member, warned, message, message.content.split(' ').slice(1)?.join(' '));
+        let { ID } = await client.warns.addWarn(message.member, warned, message, message.content.split(' ').slice(2)?.join(' '));
         message.reply(new discord_js_1.MessageEmbed()
             .setTitle("Warn Añadida!")
             .setDescription(`Usuario: \`${warned.displayName}\` \nWarn ID: ${ID}`)

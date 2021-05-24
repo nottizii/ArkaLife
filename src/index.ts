@@ -14,12 +14,12 @@ const fs = require('fs')
 const chalk = require('chalk')
 import ArkaLifeError from "./util/errorEmmiter"
 import { Message, MessageEmbed, Structures, GuildMember, Client } from "discord.js"
-import SuggestionManager from "./util/suggestionManager"
+import { suggestionManager } from "./util/suggestionManager"
 import { ConnectionConfig } from "mysql"
 import { GiveawaysManager } from "discord-giveaways"
 import path from "path"
 import { ArkaClient } from './util/ArkaClient'
-import WarningManager from "./util/warnManager"
+import { warningManager } from "./util/warnManager"
 let d = new Date()
 
 Structures.extend("GuildMember", GuildMember => {
@@ -55,8 +55,8 @@ client.database = {
 }
 
 client.errors = new ArkaLifeError('MusicError', '❌')
-client.suggestions = new SuggestionManager(client.database)
-client.warns = new WarningManager(client.database)
+client.suggestions = new suggestionManager(client.database)
+client.warns = new warningManager(client.database)
 
 client.settings = settings
 //////////////////// Client ////////////////////
@@ -89,7 +89,7 @@ client.giveawaysManager = new GiveawaysManager(client, {
 //// variables ////
 
 //// Event Handler ////
-client.once('ready', () => {
+client.once('ready', async() => {
     client.events.get("ready").run(client)
 })
 
@@ -269,7 +269,7 @@ declare module 'discord.js' {
     interface Client {
         distube: DisTube,
         errors: ArkaLifeError,
-        suggestions: SuggestionManager,
+        suggestions: suggestionManager,
         database: ConnectionConfig,
         giveawaysManager: GiveawaysManager,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -278,7 +278,7 @@ declare module 'discord.js' {
         events: Collection<Snowflake, ArkaCommand>,
         commands: Collection<Snowflake, ArkaCommand>,
         logs: TextChannel
-        warns: WarningManager
+        warns: warningManager
     }
 
     interface GuildMember {
