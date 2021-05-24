@@ -17,7 +17,7 @@ module.exports = {
             arr.push({ name: 'Posicion', value: role.rawPosition + " => " + newR.rawPosition, inline: true });
         arr.push({ name: "Rol", value: newR.toString(), inline: true });
         const e = new discord_js_1.MessageEmbed()
-            .setTitle("Rol edotado")
+            .setTitle("Rol editado")
             .setDescription(d.toUTCString())
             .addFields(arr);
         let logs = client.channels.cache.get('845436480570261554');

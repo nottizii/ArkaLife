@@ -8,7 +8,7 @@ module.exports = {
         let author = await oldEmoji.fetchAuthor();
         let client = oldEmoji.client;
         let embed = new discord_js_1.MessageEmbed()
-            .setTitle("oldEmoji Actualizado")
+            .setTitle("Emoji Actualizado")
             .setDescription(d.toUTCString())
             .addField("Información:", `Nombre: ${oldEmoji.name} => ${newEmoji.name}\nID: ${newEmoji.id}\nAnimado?:${newEmoji.animated ? 'Si' : 'No'} \nIdentificador: \`${newEmoji.identifier}\``)
             .setImage(newEmoji.url);

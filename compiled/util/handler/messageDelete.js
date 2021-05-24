@@ -4,8 +4,8 @@ const discord_js_1 = require("discord.js");
 let d = new Date();
 module.exports = {
     name: "messageDelete",
-    run: async (message) => {
-        let client = message.client;
+    run: async (message, client) => {
+        message.client;
         const e = new discord_js_1.MessageEmbed()
             .setTitle("Mensaje eliminado!")
             .setDescription(d.toUTCString())

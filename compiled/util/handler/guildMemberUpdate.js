@@ -8,7 +8,7 @@ module.exports = {
         let client = newM.client;
         if (oldM.roles.cache === newM.roles.cache || oldM.displayName === newM.displayName)
             return;
-        if (oldM.roles.cache === newM.roles.cache) {
+        if (oldM.roles.cache !== newM.roles.cache) {
             let olddiff = oldM.roles.cache.filter(r => !newM.roles.cache.has(r.id));
             let newdiff = newM.roles.cache.filter(r => !oldM.roles.cache.has(r.id));
             //console.log(olddiff, newdiff)

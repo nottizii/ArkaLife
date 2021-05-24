@@ -118,7 +118,7 @@ client.on("guildUpdate", async (oldg, newg) => {
     client.events.get("guildUpdate").run(oldg, newg);
 });
 client.on("messageDelete", async (msg) => {
-    client.events.get("guildMemberUpdate").run(msg);
+    client.events.get("guildMemberUpdate").run(msg, client);
 });
 client.on("messageDeleteBulk", async (messages) => {
     client.events.get("messageDeleteBulk").run(messages);
