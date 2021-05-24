@@ -12,7 +12,7 @@ module.exports = {
             .setDescription(d.toUTCString())
             .addField("Tipo:", channel.type, true)
             .addField("Nombre:", channel.name, true)
-            .addField("Link rapido:", channel.toString)
+            .addField("Link rapido:", channel.toString())
             .setFooter(":)")
             .setAuthor(channel.guild.me.displayName, client.user.displayAvatarURL({ size: 512 }));
         return logs.send(e);

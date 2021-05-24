@@ -13,7 +13,7 @@ module.exports = {
         if(role.rawPosition !== newR.rawPosition) arr.push({ name: 'Posicion', value: role.rawPosition + " => " + newR.rawPosition, inline: true })
         arr.push({ name: "Rol", value: newR.toString(), inline: true })
         const e = new MessageEmbed()
-        .setTitle("Rol edotado")
+        .setTitle("Rol editado")
         .setDescription(d.toUTCString())
         .addFields(arr)
         let logs = client.channels.cache.get('845436480570261554') as TextChannel

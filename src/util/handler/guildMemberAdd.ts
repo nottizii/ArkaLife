@@ -11,7 +11,7 @@ module.exports = {
         const e = new MessageEmbed()
         .setTitle("Nuevo miembro!")
         .addField("Username:", member.user.tag)
-        .addField("Creado:", member.user.createdAt)
+        .addField("Creado:", member.user.createdAt.toUTCString())
         .setThumbnail(member.user.displayAvatarURL())
         let logs = client.channels.cache.get('845436480570261554') as TextChannel
         logs?.send(e)

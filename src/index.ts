@@ -143,7 +143,7 @@ client.on("guildUpdate", async(oldg, newg) => {
 })
 
 client.on("messageDelete", async(msg) => {
-    client.events.get("guildMemberUpdate").run(msg)
+    client.events.get("guildMemberUpdate").run(msg, client)
 })
 
 client.on("messageDeleteBulk", async(messages) => {

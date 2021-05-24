@@ -5,6 +5,7 @@ let d = new Date()
 module.exports = {
     name: "emojiCreate",
     run: async (emoji: GuildEmoji) => {
+        console.log('code reach-able')
         let author = await emoji.fetchAuthor()
         let client = emoji.client
         let logs = client.channels.cache.get('845436480570261554') as TextChannel
@@ -13,6 +14,6 @@ module.exports = {
         .setDescription(d.toUTCString())
         .addField("Información:", `Nombre: ${emoji.name} \nID: ${emoji.id}\nAnimado?:${emoji.animated ? 'Si' : 'No'} \nIdentificador: \`${emoji.identifier}\``)
         .setImage(emoji.url)
-        logs?.send(embed)
+        logs.send(embed)
     }
 }
