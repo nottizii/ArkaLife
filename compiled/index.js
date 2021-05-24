@@ -20,6 +20,7 @@ const suggestionManager_1 = __importDefault(require("./util/suggestionManager"))
 const discord_giveaways_1 = require("discord-giveaways");
 const path_1 = __importDefault(require("path"));
 const ArkaClient_1 = require("./util/ArkaClient");
+const warnManager_1 = __importDefault(require("./util/warnManager"));
 let d = new Date();
 discord_js_2.Structures.extend("GuildMember", GuildMember => {
     class ArkaMember extends GuildMember {
@@ -47,10 +48,11 @@ client.database = {
     host: "51.222.29.111",
     user: "u272_VjI7IPlU9A",
     database: "s272_data",
-    password: "m2f51=t.2xLWm2c!LgRhgpwp"
+    password: "=@84q9S=Mw^yv0XQqJtKI@by"
 };
 client.errors = new errorEmmiter_1.default('MusicError', '❌');
 client.suggestions = new suggestionManager_1.default(client.database);
+client.warns = new warnManager_1.default(client.database);
 client.settings = settings;
 //////////////////// Client ////////////////////
 //////////////////// Event loader ////////////////////

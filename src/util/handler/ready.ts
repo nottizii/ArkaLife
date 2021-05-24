@@ -11,7 +11,7 @@ module.exports = {
     run: async(client: Client) => {
         client.user.setPresence({
             activities: [{
-                name: "Aun en beta!"
+                name: "arkaliferp.net | Aun en beta!"
             }],
             status: "idle"
         })

@@ -2,7 +2,7 @@ import { GuildMember } from 'discord.js'
 import { EventEmitter } from 'events'
 import * as mysql from 'mysql'
 
-class SuggestionManager extends EventEmitter {
+export default class SuggestionManager extends EventEmitter {
     dbdata: mysql.ConnectionConfig
     pool: mysql.Pool
     suggID: string
@@ -153,7 +153,5 @@ interface SuggestionData {
 }
 
 type SuggestionDataArray = Array<SuggestionData>
-
-export = SuggestionManager
 
 module.exports = { SuggestionManager }

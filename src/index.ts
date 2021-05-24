@@ -19,6 +19,7 @@ import { ConnectionConfig } from "mysql"
 import { GiveawaysManager } from "discord-giveaways"
 import path from "path"
 import { ArkaClient } from './util/ArkaClient'
+import WarningManager from "./util/warnManager"
 let d = new Date()
 
 Structures.extend("GuildMember", GuildMember => {
@@ -50,11 +51,13 @@ client.database = {
     host: "51.222.29.111",
     user: "u272_VjI7IPlU9A",
     database: "s272_data",
-    password: "m2f51=t.2xLWm2c!LgRhgpwp"
+    password: "=@84q9S=Mw^yv0XQqJtKI@by"
 }
 
 client.errors = new ArkaLifeError('MusicError', '❌')
 client.suggestions = new SuggestionManager(client.database)
+client.warns = new WarningManager(client.database)
+
 client.settings = settings
 //////////////////// Client ////////////////////
 
@@ -275,6 +278,7 @@ declare module 'discord.js' {
         events: Collection<Snowflake, ArkaCommand>,
         commands: Collection<Snowflake, ArkaCommand>,
         logs: TextChannel
+        warns: WarningManager
     }
 
     interface GuildMember {

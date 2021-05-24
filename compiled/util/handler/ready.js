@@ -32,7 +32,7 @@ module.exports = {
     run: async (client) => {
         client.user.setPresence({
             activities: [{
-                    name: "Aun en beta!"
+                    name: "arkaliferp.net | Aun en beta!"
                 }],
             status: "idle"
         });
