@@ -36,6 +36,7 @@ module.exports = {
             .setTitle("Nombre actualizado!")
             .setThumbnail(newM.user.displayAvatarURL())
             .addFields([
+                { name: "Miembro", value: newM.toString() ?? 'Sin cambios', inline: true },
                 { name: "Antes", value: oldM.displayName ?? 'Sin cambios', inline: true },
                 { name: "Ahora", value: newM.displayName ?? 'Sin cambios', inline: true }
             ])

@@ -16,6 +16,7 @@ module.exports = {
         if(!oldV.selfMute && newV.selfMute) changes.push({ name: "Auto-silenciado:", value: "Si", inline: true})
         const e = new MessageEmbed()
         .setTitle("Estado de voz actualizado")
+        .addField("Usuario:", newV.member.toString, false)
         .addFields(changes)
         let logs = client.channels.cache.get('845436480570261554') as TextChannel
         logs?.send(e)

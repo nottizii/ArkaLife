@@ -10,6 +10,7 @@ module.exports = {
         const e = new MessageEmbed()
         .setTitle("Mensaje eliminado!")
         .setDescription(d.toUTCString())
+        .addField("Usuario:", message.member.toString() ?? "Error: No pude recuperar el contenido")
         .addField("Contenido:", message.content ?? "Error: No pude recuperar el contenido")
         let logs = client.channels.cache.get('845436480570261554') as TextChannel
         logs?.send(e)
