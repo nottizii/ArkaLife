@@ -25,7 +25,7 @@
   "devDependencies": {
     "@types/node": "^15.6.0",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
-    "@typescript-eslint/parser": "^4.24.0",
+    "@typescript-eslint/parser": "^4.26.0",
     "typescript": "^4.2.4",
     "dotenv": "^10.0.0",
     "eslint": "^7.27.0"
@@ -37,7 +37,7 @@
     "chalk": "^4.1.1",
     "discord-giveaways": "^4.5.1",
     "discord.js": "github:discordjs/discord.js",
-    "distube": "^2.8.13",
+    "distube": "^2.8.14",
     "ffmpeg-static": "^4.3.0",
     "fs": "0.0.1-security",
     "jsdom": "^16.6.0",
