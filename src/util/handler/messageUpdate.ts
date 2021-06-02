@@ -16,6 +16,7 @@ module.exports = {
         if(newM.content.length <= 1024) nm = newM.content
         const e = new MessageEmbed()
         .setTitle("Mensaje actualizado!")
+        .addField("Autor:", newM.toString(), true)
         .addField("Antes:", mp, true)
         .addField("Despues:", nm, true)
         .setDescription(d.toUTCString())
