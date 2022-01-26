@@ -33,7 +33,7 @@
   "dependencies": {
     "@discordjs/opus": "github:discordjs/opus",
     "@types/mysql": "^2.15.18",
-    "canvas": "^2.8.0",
+    "canvas": "^2.9.0",
     "chalk": "^4.1.1",
     "discord-giveaways": "^4.5.1",
     "discord.js": "github:discordjs/discord.js",
